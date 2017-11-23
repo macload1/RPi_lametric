@@ -5,6 +5,7 @@
 # various animations on a strip of NeoPixels.
 import time
 import datetime
+from weather import Weather
 
 from neopixel import *
 
@@ -145,72 +146,90 @@ font5x3 = [
 	[0x08,0x18,0x10], # '~'
 ]
 
+time_icon = [
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,  64,   0), Color(  0,  64,   0), Color(  0,  64,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0)],
+    [Color(  0,   0, 255), Color(  0,   0, 255), Color(  0,   0, 255), Color(  0,   0, 255), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0), Color(  0,   0, 255), Color(  0,   0, 255), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0, 255), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,  64,   0), Color(  0,  64,   0), Color(  0,   0, 255), Color(  0,  64,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0, 255), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)]
+]
+
+weather_icon = [
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(255, 255,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(128, 128,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(128, 128,   0), Color(  0,   0,   0), Color(200, 200,   0), Color(200, 200,   0), Color(255, 255,   0), Color(128, 128,   0), Color(  0,   0,   0), Color(255, 255,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(128, 128,   0), Color(255, 255,   0), Color(255, 255,   0), Color(128, 128, 128), Color(255, 255, 255), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(255, 255, 255), Color(255, 255, 255), Color(128, 128,   0), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255)],
+    [Color(128, 128, 128), Color(255, 255, 255), Color(255, 255, 255), Color(128, 128,   0), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255)],
+    [Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255)],
+    [Color(  0,   0,   0), Color( 64,  64,  64), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color(255, 255, 255), Color( 64,  64,  64), Color(  0,   0,   0)]
+]
+
+no_icon = [
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)],
+    [Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0), Color(  0,   0,   0)]
+]
+
+def fahrenheitToCelsiuc(fahrenheit):
+	return round((fahrenheit - 32) * 5.0/9.0, 1)
+
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, color)
-        strip.show()
-        time.sleep(wait_ms/1000.0)
+    strip.show()
+    time.sleep(wait_ms/1000.0)
 
-def theaterChase(strip, color, wait_ms=50, iterations=10):
-    """Movie theater light style chaser animation."""
-    for j in range(iterations):
-        for q in range(3):
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, color)
-            strip.show()
-            time.sleep(wait_ms/1000.0)
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, 0)
-
-def wheel(pos):
-    """Generate rainbow colors across 0-255 positions."""
-    if pos < 85:
-        return Color(pos * 3, 255 - pos * 3, 0)
-    elif pos < 170:
-        pos -= 85
-        return Color(255 - pos * 3, 0, pos * 3)
-    else:
-        pos -= 170
-        return Color(0, pos * 3, 255 - pos * 3)
-
-def rainbow(strip, wait_ms=20, iterations=1):
-    """Draw rainbow that fades across all pixels at once."""
-    for j in range(256*iterations):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i+j) & 255))
-        strip.show()
-        time.sleep(wait_ms/1000.0)
-
-def rainbowCycle(strip, wait_ms=20, iterations=5):
-    """Draw rainbow that uniformly distributes itself across all pixels."""
-    for j in range(256*iterations):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
-        strip.show()
-        time.sleep(wait_ms/1000.0)
-
-def theaterChaseRainbow(strip, wait_ms=50):
-    """Rainbow movie theater light style chaser animation."""
-    for j in range(256):
-        for q in range(3):
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, wheel((i+j) % 255))
-            strip.show()
-            time.sleep(wait_ms/1000.0)
-            for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, 0)
+def showIcon(icon):
+	for i in range(8):
+		for j in range(8):
+			strip.setPixelColor(matrix_pos[i][j], icon[i][j])
 
 def writeChar(c, pos_x, pos_y, fg_color, bg_color):
     for i in range(3):
         line = font5x3[ord(c) - 0x20][i]
         for j in range(5):
-            if (line & 0x01) == 0x01:
+            if ((line & 0x01) == 0x01):
                 strip.setPixelColor(matrix_pos[pos_y + 5 - j][pos_x + i], fg_color)
             else:
-                strip.setPixelColor(matrix_pos[pos_y + 5 - j][pos_x + i], fg_color)
+                strip.setPixelColor(matrix_pos[pos_y + 5 - j][pos_x + i], bg_color)
             line >>= 1
+
+def showTemperature():
+    weather = Weather()
+    location = weather.lookup_by_location('flemalle')
+    condition = location.condition()
+    celsius = fahrenheitToCelsiuc(int(condition.temp()))
+    tenth = (celsius * 10) % 10
+    units = celsius % 10
+    ten = celsius / 10
+    showIcon(weather_icon)
+    
+    fg = Color(64,64,64)
+    bg = Color(0,0,0)
+    if celsius < 0:
+        strip.setPixelColor(157, fg)
+        strip.setPixelColor(158, fg)
+    if ten >= 1:
+		writeChar(chr(ord('0') + int(ten)), 12, 1, fg, bg)
+    writeChar(chr(ord('0') + int(units)), 16, 1, fg, bg)
+    strip.setPixelColor(75, fg)
+    writeChar(chr(ord('0') + int(tenth)), 22, 1, fg, bg)
+    strip.setPixelColor(36, fg)
+    strip.setPixelColor(44, fg)
+    strip.setPixelColor(37, fg)
+    strip.setPixelColor(45, fg)
+    writeChar(chr(ord('C')), 29, 1, fg, bg)
 
 
 def showTime(long_format):
@@ -230,19 +249,20 @@ def showTime(long_format):
     dsecond = chr(ord('0') + dsecond)
     second = chr(ord('0') + second)
     
-    fg = Color(255,255,255)
+    fg = Color(64,64,64)
     bg = Color(0,0,0)
     
     if long_format:
-        writeChar(dhour, 1, 1, fg, bg)
-        writeChar(hour, 5, 1, fg, bg)
-        writeChar(':', 8, 1, fg, bg)
-        writeChar(dminute, 11, 1, fg, bg)
-        writeChar(minute, 15, 1, fg, bg)
-        writeChar(':', 18, 1, fg, bg)
-        writeChar(dsecond, 21, 1, fg, bg)
-        writeChar(second, 25, 1, fg, bg)
+        writeChar(dhour, 3, 1, fg, bg)
+        writeChar(hour, 7, 1, fg, bg)
+        writeChar(':', 10, 1, fg, bg)
+        writeChar(dminute, 13, 1, fg, bg)
+        writeChar(minute, 17, 1, fg, bg)
+        writeChar(':', 20, 1, fg, bg)
+        writeChar(dsecond, 23, 1, fg, bg)
+        writeChar(second, 27, 1, fg, bg)
     else:
+        showIcon(time_icon)
         writeChar(dhour, 11, 1, fg, bg)
         writeChar(hour, 15, 1, fg, bg)
         writeChar(':', 18, 1, fg, bg)
@@ -258,21 +278,10 @@ if __name__ == '__main__':
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
     # Intialize the library (must be called once before other functions).
     strip.begin()
+    showTemperature()
 
     print ('Press Ctrl-C to quit.')
     while True:
-        showTime(True)
+        #showTime(False)
         strip.show()
         time.sleep(500.0/1000.0)
-#        print ('Color wipe animations.')
-#        colorWipe(strip, Color(255, 0, 0))  # Red wipe
-#        colorWipe(strip, Color(0, 255, 0))  # Blue wipe
-#        colorWipe(strip, Color(0, 0, 255))  # Green wipe
-#        print ('Theater chase animations.')
-#        theaterChase(strip, Color(127, 127, 127))  # White theater chase
-#        theaterChase(strip, Color(127,   0,   0))  # Red theater chase
-#        theaterChase(strip, Color(  0,   0, 127))  # Blue theater chase
-#        print ('Rainbow animations.')
-#        rainbow(strip)
-#        rainbowCycle(strip)
-#        theaterChaseRainbow(strip)
