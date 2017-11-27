@@ -1,7 +1,7 @@
 import spidev
 
-# spi.open(0,0)	                Öffnet den SPI-Bus 0 mit CS0
-# spi.open(0,1)	                Öffnet den SPI-Bus 0 mit CS1
+# spi.open(0,0)	                ffnet den SPI-Bus 0 mit CS0
+# spi.open(0,1)	                ffnet den SPI-Bus 0 mit CS1
 # spi.close()	                Schliesst den SPI-Bus
 # spi.readbytes(len)	        Liest len Bytes vom SPI-Slave
 # spi.writebytes([array of bytes])	Sendet ein Byte-Array zum SPI-Slave
