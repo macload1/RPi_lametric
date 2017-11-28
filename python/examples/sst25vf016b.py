@@ -62,20 +62,24 @@ def write_sst25(spi, address, data):
         data = data + [255] 
     i = 0
     spi.xfer([WREN_INSTRUCTION])
+    add = [((address >> 16) & 0x000000FF), ((address >> 8) & 0x000000FF), (address & 0x000000FF)]
+    to_receive = spi.xfer2([AAI_WORD_PROG_INSTRUCTION] + add + data[i:i+2])
+    print(str([AAI_WORD_PROG_INSTRUCTION] + add + data[i:i+2]))
+	i = 2
     while i < length:
-        add = [((address + i) >> 16), (((address + i) >> 8) & 0x000000FF), ((address+ i) & 0x000000FF)]
-        to_receive = spi.xfer2([AAI_WORD_PROG_INSTRUCTION] + add + data[i:i+2])
-        print(str([AAI_WORD_PROG_INSTRUCTION] + add + data[i:i+2]))
+        to_receive = spi.xfer2([AAI_WORD_PROG_INSTRUCTION] + data[i:i+2])
+        print(str([AAI_WORD_PROG_INSTRUCTION] + data[i:i+2]))
         i = i + 2
         status = read_status(spi)
-        while (status & 0x01) == 0x01:
+        while (status & 0x43) == 0x43:
             status = read_status(spi)
     print("Status: " + str(read_status(spi)))
     spi.xfer([WRDI_INSTRUCTION])
     return to_receive
 
 def read_sst25(spi, address, len):
-    data = [READ_INSTRUCTION] + address
+    add = [((address >> 16) & 0x000000FF), ((address >> 8) & 0x000000FF), (address & 0x000000FF)]
+    data = [READ_INSTRUCTION] + add
     for i in range(len):
         data = data + [0x00]
     to_receive = spi.xfer2(data)
@@ -89,10 +93,10 @@ print("Status: " + str(read_status(spi)))
 enable_write(spi)
 time.sleep(0.5)
 to_send = [0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18]
-address = 0x00
+address = 0x10
 write_sst25(spi, address, to_send)
 time.sleep(0.5)
-to_read = read_sst25(spi, [0x00, 0x00, 0x00], 8)
-print(str(to_read))
+to_read = read_sst25(spi, address, 8)
+print("Read bytes: " + str(to_read))
 print("Status: " + str(read_status(spi)))
 spi.close()
